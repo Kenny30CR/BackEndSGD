@@ -113,7 +113,7 @@ DELIMITER ;
 
 
 DELIMITER $$
-CREATE DEFINER=`root`@`localhost` FUNCTION `editarBalances`(`_idtenant` int(11),`_idbalance` int(11), `_fecha` VARCHAR(20), `_detalles` VARCHAR(50)) RETURNS int(1)
+CREATE DEFINER=`root`@`localhost` FUNCTION `editarBalances`(`_idbalance` int(11),`_idtenant` int(11), `_fecha` VARCHAR(20), `_detalles` VARCHAR(50)) RETURNS int(1)
 begin
     declare _cant int;
     select count(idBalance) into _cant from Balances where idBalance = _idbalance;
@@ -178,7 +178,7 @@ DELIMITER ;
 
 
 DELIMITER $$
-CREATE DEFINER=`root`@`localhost` FUNCTION `editarChoferes`(`_idtenant` int(11),`_idChofer` int(11), `_nombre` VARCHAR(255), `_apellido1` VARCHAR(255), `_apellido2` VARCHAR(255), `_cedula` VARCHAR(50)) RETURNS int(1)
+CREATE DEFINER=`root`@`localhost` FUNCTION `editarChoferes`(`_idChofer` int(11),`_idtenant` int(11), `_nombre` VARCHAR(255), `_apellido1` VARCHAR(255), `_apellido2` VARCHAR(255), `_cedula` VARCHAR(50)) RETURNS int(1)
 begin
     declare _cant int;
     select count(idChofer) into _cant from choferes where idChofer = _idChofer;
@@ -277,7 +277,7 @@ DELIMITER ;
 
 
 DELIMITER $$
-CREATE DEFINER=`root`@`localhost` FUNCTION `editarDespacho`(`_idtenant` int(11),`_ordenDesp` int(11), `_idCliente` int(11), `_fechaDesp` VARCHAR(255), `_idDestinoDesp` int(11), `_retiroDesp` VARCHAR(255), `_entregaDesp` VARCHAR(255), `_fechColoc` VARCHAR(50), `_choferEncargado` int(11), `_placa` int(11), `_tipoEquipo` int(11), `_ejes` int(11), `_dieselTransp` int(11), `_dieselGenset` int(11), `_contenedor` VARCHAR(50), `_pesoCont` int(11),  `_duaobkn` VARCHAR(50)) RETURNS int(1)
+CREATE DEFINER=`root`@`localhost` FUNCTION `editarDespacho`(`_ordenDesp` int(11),`_idtenant` int(11), `_idCliente` int(11), `_fechaDesp` VARCHAR(255), `_idDestinoDesp` int(11), `_retiroDesp` VARCHAR(255), `_entregaDesp` VARCHAR(255), `_fechColoc` VARCHAR(50), `_choferEncargado` int(11), `_placa` int(11), `_tipoEquipo` int(11), `_ejes` int(11), `_dieselTransp` int(11), `_dieselGenset` int(11), `_contenedor` VARCHAR(50), `_pesoCont` int(11),  `_duaobkn` VARCHAR(50)) RETURNS int(1)
 begin
     declare _cant int;
     select count(ordenDesp) into _cant from despacho where ordenDesp = _ordenDesp;
@@ -355,7 +355,7 @@ DELIMITER ;
 
 
 DELIMITER $$
-CREATE DEFINER=`root`@`localhost` FUNCTION `editarDestinos`(`_idtenant` int(11),`_idDestino` int(11), `_rutaDest` VARCHAR(255), `_dieselEstimado` int(11)) RETURNS int(1)
+CREATE DEFINER=`root`@`localhost` FUNCTION `editarDestinos`(`_idDestino` int(11),`_idtenant` int(11), `_rutaDest` VARCHAR(255), `_dieselEstimado` int(11)) RETURNS int(1)
 begin
     declare _cant int;
     select count(idDestino) into _cant from destinos where idDestino = _idDestino;
@@ -488,7 +488,7 @@ DELIMITER ;
 
 
 DELIMITER $$
-CREATE DEFINER=`root`@`localhost` FUNCTION `editarEstacion`(`_idtenant` int(11),`_idEstacion` int(11), `_nombreEstacion` VARCHAR(255), `_telefonoEstacion` int(11), `_correoEstacion` VARCHAR(255), `_direccionEstacion` VARCHAR(255)) RETURNS int(1)
+CREATE DEFINER=`root`@`localhost` FUNCTION `editarEstacion`(`_idEstacion` int(11),`_idtenant` int(11), `_nombreEstacion` VARCHAR(255), `_telefonoEstacion` int(11), `_correoEstacion` VARCHAR(255), `_direccionEstacion` VARCHAR(255)) RETURNS int(1)
 begin
     declare _cant int;
     select count(idEstacion) into _cant from estacion where idEstacion = _idEstacion;
@@ -732,7 +732,7 @@ DELIMITER ;
 
 
 DELIMITER $$
-CREATE DEFINER=`root`@`localhost` FUNCTION `editarPlanilla`(`_idtenant` int(11), `_idPlanilla` int(11),  `_nombre` VARCHAR(255), `_cedula` VARCHAR(255), `_salarioBase` int(11), `_peajes` int(11), `_patios` VARCHAR(255), `_bonificacion` int(11), `_domingo` int(1), `_feriados` VARCHAR(255), `_seguro` int(1), `_estado` int(11)) RETURNS int(1)
+CREATE DEFINER=`root`@`localhost` FUNCTION `editarPlanilla`(`_idPlanilla` int(11),`_idtenant` int(11),   `_nombre` VARCHAR(255), `_cedula` VARCHAR(255), `_salarioBase` int(11), `_peajes` int(11), `_patios` VARCHAR(255), `_bonificacion` int(11), `_domingo` int(1), `_feriados` VARCHAR(255), `_seguro` int(1), `_estado` int(11)) RETURNS int(1)
 begin
     declare _cant int;
     select count(idPlanilla) into _cant from planilla where idPlanilla = _idPlanilla;

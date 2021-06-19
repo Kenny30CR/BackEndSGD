@@ -48,7 +48,7 @@ class Balances extends BaseBD{
     }
     
     public function modificar(Request $request, Response $response, $args) {
-        $this->iniciar('Balances','id');
+        $this->iniciar('Balances','idBalance');
         $body= json_decode($request->getBody());
         $codigo= $args['codigo'];
         $datos= $this->guardar($body, $codigo);

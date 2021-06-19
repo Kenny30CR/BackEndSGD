@@ -167,7 +167,7 @@ class BaseBD{
         return $datos;
     }
     public function eliminarbd($codigo){
-        $sql= 'select eliminar'.$this->tabla.'(:codigo);'; //<- eliminar nuevo curso
+        $sql= 'select eliminar'.$this->tabla.'(:codigo);'; 
         $conexion = $this->container->get('bd');
         $consulta= $conexion->prepare($sql);
         $consulta->bindParam(':codigo', $codigo, $this->obtConst($codigo));
@@ -178,7 +178,7 @@ class BaseBD{
         return $datos;
     }
     public function sigCodigo($tabla){
-        $sql= 'select siguienteCodigo(:tabla);'; //<- eliminar nuevo curso
+        $sql= 'select siguienteCodigo(:tabla);'; 
         $conexion = $this->container->get('bd');
         $consulta= $conexion->prepare($sql);
         $consulta->bindParam(':tabla', $tabla, PDO::PARAM_STR);
