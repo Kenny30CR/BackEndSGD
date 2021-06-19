@@ -17,7 +17,7 @@ $app->add(new Tuupola\Middleware\JwtAuthentication([
     //"ignore" => ["/auth","/curso", "/codigo","/filtrar", "/usuario","/producto", "/cliente", "/venta"]
     //"ignore" => ["/auth","/balances","/usuario","/actas","/"]
     //"ignore" => ["/auth"]
-    "ignore" => ["/auth"]
+    "ignore" => ["/"]
     
 ]));
 
