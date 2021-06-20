@@ -11,7 +11,7 @@ CREATE DEFINER=`root`@`localhost` FUNCTION `editarUsuarios`(`_id` int(11), `_cor
 begin
     declare _cant int;
     select count(idUsuario) into _cant from usuarios where idUsuario = _id;
-    if _cant > 0 then
+    if _cant = 1 then
         update usuarios set
 			correo = _nombre,
             tipoUsuario = _rol
@@ -117,18 +117,15 @@ CREATE DEFINER=`root`@`localhost` FUNCTION `editarBalances`(`_idbalance` int(11)
 begin
     declare _cant int;
     select count(idBalance) into _cant from Balances where idBalance = _idbalance;
-    if _cant > 0 then
-		select count(idBalance) into _cant from Balances where idBalance <> _idbalance;
-        if _cant = 0 then
+    if _cant = 1 then
         update balances set
-			      idTenant1 = _idtenant,
+			    idTenant1 = _idtenant,
             fechaBalance = _fecha,
             detalles= _detalles
         where idBalance = _idbalance;
         set _cant=1;
         else 
         set _cant=2;
-        end if;
     end if;
     return _cant;
 end$$
@@ -182,9 +179,8 @@ CREATE DEFINER=`root`@`localhost` FUNCTION `editarChoferes`(`_idChofer` int(11),
 begin
     declare _cant int;
     select count(idChofer) into _cant from choferes where idChofer = _idChofer;
-    if _cant > 0 then
-		select count(idChofer) into _cant from choferes where idChofer <> _idChofer;
-        if _cant = 0 then
+    if _cant = 1 then
+		
         update choferes set
 			      idTenant1 = _idtenant,
             nombreChofer = _nombre,
@@ -195,7 +191,7 @@ begin
         set _cant=1;
         else 
         set _cant=2;
-        end if;
+
     end if;
     return _cant;
 end$$
@@ -281,9 +277,8 @@ CREATE DEFINER=`root`@`localhost` FUNCTION `editarDespacho`(`_ordenDesp` int(11)
 begin
     declare _cant int;
     select count(ordenDesp) into _cant from despacho where ordenDesp = _ordenDesp;
-    if _cant > 0 then
-		select count(ordenDesp) into _cant from despacho where ordenDesp <> _ordenDesp;
-        if _cant = 0 then
+    if _cant = 1 then
+	
         update despacho set
 			      idTenant1 = _idtenant,
             idCliente = _idCliente,
@@ -305,7 +300,7 @@ begin
         set _cant=1;
         else 
         set _cant=2;
-        end if;
+
     end if;
     return _cant;
 end$$
@@ -359,9 +354,8 @@ CREATE DEFINER=`root`@`localhost` FUNCTION `editarDestinos`(`_idDestino` int(11)
 begin
     declare _cant int;
     select count(idDestino) into _cant from destinos where idDestino = _idDestino;
-    if _cant > 0 then
-		select count(idDestino) into _cant from destinos where idDestino <> _idDestino;
-        if _cant = 0 then
+    if _cant = 1 then
+		
         update destinos set
 			      idTenant1 = _idtenant,
             rutaDest = _rutaDest,
@@ -370,7 +364,7 @@ begin
         set _cant=1;
         else 
         set _cant=2;
-        end if;
+ 
     end if;
     return _cant;
 end$$
@@ -424,9 +418,8 @@ CREATE DEFINER=`root`@`localhost` FUNCTION `editarDiesel`(`_idOrden` int(11), `_
 begin
     declare _cant int;
     select count(idOrden) into _cant from diesel where idOrden = _idOrden;
-    if _cant > 0 then
-		select count(idOrden) into _cant from diesel where idOrden <> _idOrden;
-        if _cant = 0 then
+    if _cant = 1 then
+		
         update diesel set
 			      idTenant1 = _idtenant,
             estacionServicio=_estacionServicio,
@@ -438,7 +431,7 @@ begin
         set _cant=1;
         else 
         set _cant=2;
-        end if;
+
     end if;
     return _cant;
 end$$
@@ -492,9 +485,8 @@ CREATE DEFINER=`root`@`localhost` FUNCTION `editarEstacion`(`_idEstacion` int(11
 begin
     declare _cant int;
     select count(idEstacion) into _cant from estacion where idEstacion = _idEstacion;
-    if _cant > 0 then
-		select count(idEstacion) into _cant from estacion where idEstacion <> _idEstacion;
-        if _cant = 0 then
+    if _cant = 1  then
+		
         update estacion set
 			      idTenant1 = _idtenant,
             nombreEstacion=_nombreEstacion,
@@ -505,7 +497,7 @@ begin
         set _cant=1;
         else 
         set _cant=2;
-        end if;
+
     end if;
     return _cant;
 end$$
@@ -577,9 +569,8 @@ CREATE DEFINER=`root`@`localhost` FUNCTION `editarFacturacion`(`_idFactura` int(
 begin
     declare _cant int;
     select count(idFactura) into _cant from facturacion where idFactura = _idFactura;
-    if _cant > 0 then
-		select count(idFactura) into _cant from facturacion where idFactura <> _idFactura;
-        if _cant = 0 then
+    if _cant = 1 then
+		
         update facturacion set  
             ordenDesp= _ordenDesp,
             subcontratados=_subcontratados,
@@ -594,7 +585,7 @@ begin
         set _cant=1;
         else 
         set _cant=2;
-        end if;
+
     end if;
     return _cant;
 end$$
@@ -648,9 +639,8 @@ CREATE DEFINER=`root`@`localhost` FUNCTION `editarFACTURADIESEL`(`_idFactura` in
 begin
     declare _cant int;
     select count(idFactura) into _cant from FACTURADIESEL where idFactura = _idFactura;
-    if _cant > 0 then
-		select count(idFactura) into _cant from FACTURADIESEL where idFactura <> _idFactura;
-        if _cant = 0 then
+    if _cant = 1 then
+		
         update FACTURADIESEL set
 			      idTenant1 = _idtenant,
                 fecha=_fecha,
@@ -660,7 +650,7 @@ begin
         set _cant=1;
         else 
         set _cant=2;
-        end if;
+
     end if;
     return _cant;
 end$$
@@ -736,9 +726,8 @@ CREATE DEFINER=`root`@`localhost` FUNCTION `editarPlanilla`(`_idPlanilla` int(11
 begin
     declare _cant int;
     select count(idPlanilla) into _cant from planilla where idPlanilla = _idPlanilla;
-    if _cant > 0 then
-		select count(idPlanilla) into _cant from planilla where idPlanilla <> _idPlanilla;
-        if _cant = 0 then
+    if _cant = 1 then
+		
         update planilla set
 			      idTenant1 = _idtenant,
                 nombre=_nombre,
@@ -755,7 +744,7 @@ begin
         set _cant=1;
         else 
         set _cant=2;
-        end if;
+  
     end if;
     return _cant;
 end$$
@@ -809,9 +798,8 @@ CREATE DEFINER=`root`@`localhost` FUNCTION `editarTenant`(`_idTenant` int(11),  
 begin
     declare _cant int;
     select count(idTenant) into _cant from tenant where idTenant = _idTenant;
-    if _cant > 0 then
-		select count(idTenant) into _cant from tenant where idTenant <> _idTenant;
-        if _cant = 0 then
+    if _cant = 1 then
+		
         update tenant set   
                 nombreTenant=_nombreTenant,
                 estadoTenant=_estadoTenant
@@ -819,7 +807,7 @@ begin
         set _cant=1;
         else 
         set _cant=2;
-        end if;
+ 
     end if;
     return _cant;
 end$$
