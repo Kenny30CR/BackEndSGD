@@ -397,13 +397,13 @@ DELIMITER ;
 
 -- Diesel------------------------------------------------------------------------------------------------------------------
 DELIMITER $$
-CREATE DEFINER=`root`@`localhost` FUNCTION `nuevoDiesel`(`_idOrden` int(11), `_idtenant` int(11), `_estacionServicio` int(11), `_idChofer` int(11), `_placa` int(11), `_destino` VARCHAR(255), `_observacion` VARCHAR(255)) RETURNS int(1)
+CREATE DEFINER=`root`@`localhost` FUNCTION `nuevoDiesel`(`_idOrden` int(11), `_idtenant` int(11), `_estacionServicio1` int(11), `_idChofer` int(11), `_placa` int(11), `_destino` VARCHAR(255), `_observacion` VARCHAR(255)) RETURNS int(1)
 begin
     declare _cant int;
     select count(idOrden) into _cant from diesel where idOrden = _idOrden;
     if _cant < 1 then
-        insert into diesel(idOrden,idTenant1,estacionServicio,idChofer,placa,destino,observacion) 
-			values (_idOrden,_idtenant,_estacionServicio,_idChofer,_placa,_destino,_observacion);
+        insert into diesel(idOrden,idTenant1,estacionServicio1,idChofer,placa,destino,observacion) 
+			values (_idOrden,_idtenant,_estacionServicio1,_idChofer,_placa,_destino,_observacion);
     end if;
     return _cant;
 end$$
@@ -427,15 +427,15 @@ DELIMITER ;
 
 
 DELIMITER $$
-CREATE DEFINER=`root`@`localhost` FUNCTION `editarDiesel`(`_idOrden` int(11), `_idtenant` int(11), `_estacionServicio` int(11), `_idChofer` int(11), `_placa` int(11), `_destino` VARCHAR(255), `_observacion` VARCHAR(255)) RETURNS int(1)
-begin
+CREATE DEFINER=`root`@`localhost` FUNCTION `editarDiesel`(`_idOrden` int(11), `_idtenant` int(11), `_estacionServicio1` int(11), `_idChofer` int(11), `_placa` int(11), `_destino` VARCHAR(255), `_observacion` VARCHAR(255)) RETURNS int(1)
+begin  
     declare _cant int;
     select count(idOrden) into _cant from diesel where idOrden = _idOrden;
     if _cant = 1 then
 		
         update diesel set
 			      idTenant1 = _idtenant,
-            estacionServicio=_estacionServicio,
+            estacionServicio1=_estacionServicio1,
             idChofer=_idChofer,
             placa=_placa,
             destino=_destino,
