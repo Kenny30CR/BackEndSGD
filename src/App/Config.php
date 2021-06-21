@@ -4,7 +4,7 @@ $container->set('Config_bd',function(){
         "host" => "localhost",
         "bd" => "SGD",
         "usr" =>  "root",
-        "pass" => "root",
+        "pass" => "",
         "charset" => "utf8",
         'collation' => 'utf8_spanish_ci',
     ];
