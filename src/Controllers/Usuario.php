@@ -9,7 +9,7 @@ class Usuario extends BaseBD{
     public function consultarTodos(Request $request, Response $response, $args) {
         $indice= $args ['indice'];
         $limite= $args ['limite'];
-        $this->iniciar('Usuarios','idUsuario');
+        $this->iniciar('Usuario','id');
         $datos= $this->todos($indice,$limite);
         $status= sizeof($datos) > 0 ? 200 : 204;
         $response->getBody()->write(json_encode($datos));
@@ -18,7 +18,7 @@ class Usuario extends BaseBD{
 
     public function buscarCodigo(Request $request, Response $response, $args) {
         $codigo = $args['codigo'];
-        $this->iniciar('Usuarios','idUsuario');
+        $this->iniciar('Usuario','id');
         $datos= $this->buscar($codigo);
         $status= sizeof($datos) > 0 ? 200 : 404;
         $response->getBody()->write(json_encode($datos));
@@ -26,7 +26,7 @@ class Usuario extends BaseBD{
     }
     
     public function nuevo(Request $request, Response $response, $args) {
-        $this->iniciar('Usuarios','idUsuario');
+        $this->iniciar('Usuario','id');
         $body= json_decode($request->getBody());
         $opciones=[
             'cost'=>11
@@ -43,7 +43,7 @@ class Usuario extends BaseBD{
     public function filtro(Request $request, Response $response, $args) {
         $campos = explode('&',$args['campos']);
         $valores = explode('&',$args['valores']);
-        $this->iniciar('Usuarios','idUsuario');
+        $this->iniciar('Usuario','id');
         $datos= $this->filtrar($campos,$valores);
         $status= sizeof($datos) > 0 ? 200 : 404;
         $response->getBody()->write(json_encode($datos));
@@ -53,7 +53,7 @@ class Usuario extends BaseBD{
     public function modificar(Request $request, Response $response, $args) {
         $body= json_decode($request->getBody());
         $codigo= $args['codigo'];
-        $this->iniciar('Usuarios','idUsuario');
+        $this->iniciar('Usuario','id');
         $datos= $this->guardar($body, $codigo);
         $status= $datos[0] == 0 ? 404 : 200;
         $response->getBody()->write(json_encode($body));
@@ -62,7 +62,7 @@ class Usuario extends BaseBD{
     }
     
     public function eliminar(Request $request, Response $response, $args) {
-        $this->iniciar('Usuarios','idUsuario');
+        $this->iniciar('Usuario','id');
         $codigo=$args['codigo'];
         $datos= $this->eliminarbd($codigo);
         $status= $datos[0] == 0 ? 404 : 200;

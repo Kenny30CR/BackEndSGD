@@ -8,12 +8,12 @@ use PDO;
 class Seguridad extends BaseBD{
 
     private function identificarse($usuario, $passw){
-        $this->iniciar('Usuarios', 'idUsuario');
+        $this->iniciar('Usuario', 'id');
         $datos= $this->buscar($usuario);
-        $resultado= (sizeof($datos) > 0 && (password_verify($passw, $datos[0]->contraseña))) ? $datos : null;
-        
+        $resultado= (sizeof($datos) > 0 && (password_verify($passw, $datos[0]->passw))) ? $datos : null;
         return $resultado;
     }
+
 
     private function generarTokens($id, $rol){
         $payload =[
@@ -43,9 +43,9 @@ class Seguridad extends BaseBD{
 
     public function iniciarSesion(Request $request, Response $response, $args) {
         $body= json_decode($request->getBody());
-        $datos= $this->identificarse($body->idUsuario, $body->contraseña);
+        $datos= $this->identificarse($body->id, $body->passw);
         if($datos){
-            $resultado= $this->generarTokens($body->idUsuario, $datos[0]->tipoUsuario);
+            $resultado= $this->generarTokens($body->id, $datos[0]->rol);
         }
 
         if(isset($resultado)){
@@ -61,7 +61,7 @@ class Seguridad extends BaseBD{
 
     public function cerrarSesion(Request $request, Response $response, $args) {
         $body= json_decode($request->getBody());
-        $datos= $this->modificarToken($body->idUsuario);
+        $datos= $this->modificarToken($body->id);
         $response->getBody()->write(json_encode($body));
         return $response
         ->withHeader('Content-Type','application/json')->withStatus(200);
@@ -74,13 +74,13 @@ class Seguridad extends BaseBD{
             $opciones=[
                 'cost'=>11
             ];
-            $hash=password_hash($body->idUsuario, PASSWORD_BCRYPT, $opciones);
-            $sql= 'select cambiarPasswUsuarios(:idUsuario, :contraseña);';
+            $hash=password_hash($body->id, PASSWORD_BCRYPT, $opciones);
+            $sql= 'select cambiarPasswUsuario(:id, :passw);';
             $conexion = $this->container->get('bd');
             $consulta= $conexion->prepare($sql);
 
-            $consulta->bindValue(':id', $body->idUsuario, PDO::PARAM_STR);
-            $consulta->bindValue(':contraseña', $hash, PDO::PARAM_STR);
+            $consulta->bindValue(':id', $body->id, PDO::PARAM_STR);
+            $consulta->bindValue(':passw', $hash, PDO::PARAM_STR);
 
             $status= $consulta->execute() ? 200 : 500;
 
@@ -90,17 +90,17 @@ class Seguridad extends BaseBD{
 
     public function cambioContraseña(Request $request, Response $response, $args) {
         $body= json_decode($request->getBody());
-        $datos= $this->identificarse($body->idUsuario, $body->contraseñaN);
+        $datos= $this->identificarse($body->id, $body->passwV);
         if($datos){
             $opciones=[
                 'cost'=>11
             ];
-            $contraseñaN=password_hash($body->contraseñaN, PASSWORD_BCRYPT, $opciones);
-            $sql= 'select cambiarPasswUsuarios(:idUsuario, :contraseña);';
+            $passwN=password_hash($body->passwN, PASSWORD_BCRYPT, $opciones);
+            $sql= 'select cambiarPasswUsuario(:id, :passw);';
             $conexion = $this->container->get('bd');
             $consulta= $conexion->prepare($sql);
-            $consulta->bindValue(':idUsuario', $body->id, PDO::PARAM_STR);
-            $consulta->bindValue(':contraseña', $contraseñaN, PDO::PARAM_STR);
+            $consulta->bindValue(':id', $body->id, PDO::PARAM_STR);
+            $consulta->bindValue(':passw', $passwN, PDO::PARAM_STR);
             $status= $consulta->execute() ? 200 : 500;
         }else {
             $status= 401;
@@ -112,10 +112,10 @@ class Seguridad extends BaseBD{
 
     public function refrescarToken(Request $request, Response $response, $args) {
         $body= json_decode($request->getBody());
-        $datos= $this->validarRefresco($body->idUsuario, $body->rfT);
+        $datos= $this->validarRefresco($body->id, $body->rfT);
 
         if(sizeof($datos) > 0){
-            $resultado= $this->generarTokens($body->idUsuario, $datos[0]->tipoUsuario);
+            $resultado= $this->generarTokens($body->id, $datos[0]->rol);
         }
 
         if(isset($resultado)){

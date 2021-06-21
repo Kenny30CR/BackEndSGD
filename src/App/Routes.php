@@ -21,7 +21,7 @@ $app->get('/filtrar', function (Request $request, Response $response, $args) {
 });
 
 //*****************************RUTAS DE USUARIOS*******************
-$app->group('/usuarios',function(RouteCollectorProxy $usuario){
+$app->group('/usuario',function(RouteCollectorProxy $usuario){
 
     $usuario->get('/{indice}/{limite}', 'App\Controllers\Usuario:consultarTodos');
     $usuario->get('/{codigo}', 'App\Controllers\Usuario:buscarCodigo');

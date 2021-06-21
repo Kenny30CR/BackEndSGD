@@ -1,20 +1,51 @@
 -- Usuarios------------------------------------------------------------------------------------------------------------------
+
+--
+-- Funciones
+--
 DELIMITER $$
-CREATE DEFINER=`root`@`localhost` PROCEDURE `todosUsuarios`(_pagina TINYINT, _cantRegs TINYINT)
+DROP PROCEDURE IF EXISTS todosUsuario$$
+CREATE DEFINER=root@localhost PROCEDURE todosUsuario (_pagina TINYINT, _cantRegs TINYINT)
 begin
-    select * from usuarios order by correo limit _pagina, _cantRegs;
+    select * from usuario order by nombre limit _pagina, _cantRegs;
 end$$
 DELIMITER ;
 
 DELIMITER $$
-CREATE DEFINER=`root`@`localhost` FUNCTION `editarUsuarios`(`_id` int(11), `_correo` VARCHAR(50), `_rol` TINYINT) RETURNS int(1)
+DROP PROCEDURE IF EXISTS buscarUsuario$$
+CREATE DEFINER=root@localhost PROCEDURE buscarUsuario (_id varchar(100))
+begin
+    select * from usuario where id = _id;
+end$$
+DELIMITER ;
+
+DELIMITER $$
+DROP FUNCTION IF EXISTS nuevoUsuario$$
+CREATE DEFINER=root@localhost FUNCTION nuevoUsuario (_id varchar(100), _nombre VARCHAR(50), 
+    _rol tinyint, _passw varchar(255), _idtenant int(11) ) RETURNS INT(1)
 begin
     declare _cant int;
-    select count(idUsuario) into _cant from usuarios where idUsuario = _id;
-    if _cant = 1 then
-        update usuarios set
-			correo = _nombre,
-            tipoUsuario = _rol
+    select count(_id) into _cant from usuario where id = _id;
+    if _cant < 1 then
+        insert into usuario(id, nombre, rol, passw, idTenant1) 
+			values (_id, _nombre, _rol, _passw, _idtenant);
+    end if;
+    return _cant;
+end$$
+DELIMITER ;
+
+DELIMITER $$
+DROP FUNCTION IF EXISTS editarUsuario$$
+CREATE DEFINER=root@localhost FUNCTION editarUsuario (_id varchar(100), _nombre VARCHAR(50),
+                                                      _rol tinyint, _idtenant int(11)) RETURNS INT(1) 
+begin
+    declare _cant int;
+    select count(id) into _cant from usuario where id = _id;
+    if _cant > 0 then
+        update usuario set
+			nombre = _nombre,
+            rol = _rol,
+            idTenant1= _idtenant
         where id = _id;
     end if;
     return _cant;
@@ -22,60 +53,42 @@ end$$
 DELIMITER ;
 
 DELIMITER $$
-CREATE DEFINER=`root`@`localhost` PROCEDURE `buscarUsuarios`(IN `_id` int(11))
-begin
-    select * from usuarios where idUsuario = _id;
-end$$
-DELIMITER ;
-
-DELIMITER $$
-CREATE DEFINER=`root`@`localhost` FUNCTION `cambiarPasswUsuarios`(`_id` int(11), `_passw` VARCHAR(255)) RETURNS int(1)
+DROP FUNCTION IF EXISTS eliminarUsuario$$
+CREATE DEFINER=root@localhost FUNCTION eliminarUsuario (_id varchar(100)) RETURNS INT(1)
 begin
     declare _cant int;
-    select count(idUsuario) into _cant from usuarios where idUsuario = _id;
+    select count(id) into _cant from usuario where id = _id;
     if _cant > 0 then
-        update usuarios set
-			contraseña = _passw
-        where idUsuario = _id;
+        delete from usuario where id = _id;
     end if;
     return _cant;
 end$$
 DELIMITER ;
 
 DELIMITER $$
-CREATE DEFINER=`root`@`localhost` FUNCTION `eliminarUsuarios`(_id int(11)) RETURNS int(1)
+DROP FUNCTION IF EXISTS cambiarPasswUsuario$$
+CREATE DEFINER=root@localhost FUNCTION cambiarPasswUsuario (_id varchar(100), _passw tinyint) RETURNS INT(1)
 begin
     declare _cant int;
-    select count(idUsuario) into _cant from usuarios where idUsuario = _id;
+    select count(id) into _cant from usuario where id = _id;
     if _cant > 0 then
-        delete from usuarios where idUsuario = _id;
+        update usuario set
+			passw = _passw
+        where id = _id;
     end if;
     return _cant;
 end$$
 DELIMITER ;
 
 DELIMITER $$
-CREATE DEFINER=`root`@`localhost` FUNCTION `modificarToken`(`_id` int(11), `_rfT` TEXT) RETURNS int(1)
-begin
+DROP FUNCTION IF EXISTS `modificarToken`$$
+CREATE DEFINER=`root`@`localhost` FUNCTION `modificarToken` (`_id` VARCHAR(100), `_rfT` TEXT) RETURNS INT(1) begin
     declare _cant int;
-    select count(idUsuario) into _cant from usuarios where idUsuario = _id;
+    select count(id) into _cant from usuario where id = _id;
     if _cant > 0 then
-        update usuarios set
+        update usuario set
                 rfT = _rfT
-                where idUsuario = _id;
-    end if;
-    return _cant;
-end$$
-DELIMITER ;
-
-DELIMITER $$
-CREATE DEFINER=`root`@`localhost` FUNCTION `nuevoUsuarios`(`_id` int(11), `_correo` VARCHAR(50), `_tipo` TINYINT, `_passw` VARCHAR(255), `_idtenant` int(11)) RETURNS int(1)
-begin
-    declare _cant int;
-    select count(idUsuario) into _cant from usuarios where idUsuario = _id;
-    if _cant < 1 then
-        insert into usuarios(idUsuario, correo, contraseña, tipoUsuario, idTenant1) 
-			values (_id, _correo, _passw, _tipo, _idtenant);
+                where id = _id;
     end if;
     return _cant;
 end$$
