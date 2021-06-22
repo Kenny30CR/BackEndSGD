@@ -122,7 +122,7 @@ $app->group('/facturaciondiesel',function(RouteCollectorProxy $balances){
 
     $balances->get('/{indice}/{limite}', 'App\Controllers\FacturacionDiesel:consultarTodos');
     $balances->get('/{codigo}', 'App\Controllers\FacturacionDiesel:buscarCodigo');
-    $balances->get('/filtrado/{campos}/{valores}', 'App\Controllers\FacturacionDiesel:filtro');
+    $balances->get('/filtrado/{campos}/{valores}', 'App\Controllers\FacturacionDiesel:filtro'); 
     $balances->post('', 'App\Controllers\FacturacionDiesel:nuevo');
     $balances->put('/{codigo}', 'App\Controllers\FacturacionDiesel:modificar');
     $balances->delete('/{codigo}', 'App\Controllers\FacturacionDiesel:eliminar');
