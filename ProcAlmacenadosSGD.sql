@@ -658,7 +658,7 @@ begin
 			      idTenant1 = _idtenant,
                 fecha=_fecha,
                 pagada=_pagada,
-                beneficio=_benef
+                beneficio=_beneficio
         where idFactura = _idFactura;
         set _cant=1;
         else 
