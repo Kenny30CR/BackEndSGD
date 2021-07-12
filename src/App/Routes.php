@@ -9,7 +9,8 @@ $app->get('/', function (Request $request, Response $response, $args) {
     return $response;
 });
 //*********************RUTAS DE FILTROS*****************
-$app->get('/codigo/{tabla}',  'App\Controllers\codigo:siguienteCodigo');
+$app->get('/codigo/{tabla}',  'App\Controllers\Codigo:siguienteCodigo');
+
 $app->group('/filtrar/{tabla}',function(RouteCollectorProxy $filtro){
     $filtro->get('/numregs','App\Controllers\Filtro:cantRegs');
     $filtro->get('/{pag}/{lim}','App\Controllers\Filtro:ejecutar');
