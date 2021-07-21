@@ -118,17 +118,24 @@ $app->group('/facturacion',function(RouteCollectorProxy $balances){
     $balances->delete('/{codigo}', 'App\Controllers\Facturacion:eliminar');
 });
 
-$app->group('/facturas',function(RouteCollectorProxy $balances){
+//$app->group('/facturas',function(RouteCollectorProxy $balances){
     
-    $balances->get('', 'App\Controllers\Facturas:cantFacturas');
-    $balances->get('/{indice}/{limite}', 'App\Controllers\facturas:consultarTodos');
+    //$balances->get('', 'App\Controllers\Facturas:cantFacturas');
+    //$balances->get('/{indice}/{limite}', 'App\Controllers\facturas:consultarTodos');
     
+//});
+
+$app->get('/facturas', function (Request $request, Response $response, $args) {
+    $myObj->name = "John";
+    $myObj->age = 30;
+    $myObj->city = "New York";
+    $response->getBody()->write(json_encode($myObj));
+    return $response;
 });
 
-//$app->get('/facturas', function (Request $request, Response $response, $args) {
-    //$response->getBody()->write("Cant facturas");
-    //return $response;
-//});
+
+
+
 
 //*****************************RUTAS DE FACTURACIONDIESEL*******************
 $app->group('/facturaciondiesel',function(RouteCollectorProxy $balances){

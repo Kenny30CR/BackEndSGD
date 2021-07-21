@@ -864,3 +864,10 @@ begin
   return _cant;
   end$$
 DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `todosFacturacionxordenDesp`(IN `_pagina` TINYINT, IN `_cantRegs` TINYINT)
+begin
+    select * from tenant order by nombreTenant limit _pagina, _cantRegs;
+end$$
+DELIMITER ;
