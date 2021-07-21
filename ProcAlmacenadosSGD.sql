@@ -530,13 +530,13 @@ DELIMITER ;
 
 -- Facturacion------------------------------------------------------------------------------------------------------------------
 DELIMITER $$
-CREATE DEFINER=`root`@`localhost` FUNCTION `nuevoFacturacion`(`_idFactura` int(11), `_ordenDesp` int(11), `_subcontratados` VARCHAR(255), `_fechaFactura` VARCHAR(255), `_facturaPagada` int(11), `_descripcion` VARCHAR(255), `_subTotal` int(11), `_montoTotal` int(11), `_indicacionExtra` VARCHAR(255), `_montoExtra` int(11)) RETURNS int(1)
+CREATE DEFINER=`root`@`localhost` FUNCTION `nuevoFacturacion`(`_idtenant` int(11),`_idFactura` int(11), `_subcontratados` VARCHAR(255), `_fechaFactura` VARCHAR(255), `_facturaPagada` int(11), `_descripcion` VARCHAR(255), `_subTotal` int(11), `_montoTotal` int(11), `_indicacionExtra` VARCHAR(255), `_montoExtra` int(11)) RETURNS int(1)
 begin
     declare _cant int;
     select count(idFactura) into _cant from facturacion where idFactura = _idFactura;
     if _cant < 1 then
-        insert into facturacion(idFactura,
-        ordenDesp,
+        insert into facturacion(
+        idTenant,
         subcontratados,
         fechaFactura,
         facturaPagada,
@@ -545,8 +545,8 @@ begin
         montoTotal,
         indicaciónExtra,
         montoExtra) 
-			values (_idFactura,
-        _ordenDesp,
+			values (_idtenant,
+        _idFactura,
         _subcontratados,
         _fechaFactura,
         _facturaPagada,
@@ -578,14 +578,14 @@ DELIMITER ;
 
 
 DELIMITER $$
-CREATE DEFINER=`root`@`localhost` FUNCTION `editarFacturacion`(`_idFactura` int(11), `_ordenDesp` int(11), `_subcontratados` VARCHAR(255), `_fechaFactura` VARCHAR(255), `_facturaPagada` int(11), `_descripcion` VARCHAR(255), `_subTotal` int(11), `_montoTotal` int(11), `_indicacionExtra` VARCHAR(255), `_montoExtra` int(11)) RETURNS int(1)
+CREATE DEFINER=`root`@`localhost` FUNCTION `editarFacturacion`(`_idtenant` int(11),`_idFactura` int(11), `_subcontratados` VARCHAR(255), `_fechaFactura` VARCHAR(255), `_facturaPagada` int(11), `_descripcion` VARCHAR(255), `_subTotal` int(11), `_montoTotal` int(11), `_indicacionExtra` VARCHAR(255), `_montoExtra` int(11)) RETURNS int(1)
 begin
     declare _cant int;
     select count(idFactura) into _cant from facturacion where idFactura = _idFactura;
     if _cant = 1 then
 		
         update facturacion set  
-            ordenDesp= _ordenDesp,
+            idTenant= _idtenant,
             subcontratados=_subcontratados,
             fechaFactura=_fechaFactura,
             facturaPagada=_facturaPagada,
@@ -613,6 +613,13 @@ begin
         delete from facturacion where idFactura = _idFactura;
     end if;
     return _cant;
+end$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `todosFacturacion`(IN `_pagina` TINYINT, IN `_cantRegs` TINYINT)
+begin
+    select * from facturacion order by fechaFactura limit _pagina, _cantRegs;
 end$$
 DELIMITER ;
 
@@ -849,3 +856,11 @@ begin
 DELIMITER ;
 
 
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` FUNCTION `cantFacturas`(`_fech1` varchar(255), `_fech2` varchar(255)) RETURNS int(1)
+begin
+  declare _cant int;
+  SELECT COUNT(idFactura) into _cant FROM facturacion where fechaFactura BETWEEN _fech1 and _fech2;
+  return _cant;
+  end$$
+DELIMITER ;

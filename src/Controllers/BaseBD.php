@@ -84,6 +84,47 @@ class BaseBD{
         $conexion=null;
         return $datos;
     }
+
+//*************************************************************** */
+    public function cantFacturas($pag,$lim){
+        
+        $conexion = $this->container->get('bd');
+        $sql= "select ".$this->tabla."(':pag', ':lim');";
+        $consulta= $conexion->prepare($sql);
+        $consulta->bindParam(':pag', $pag, PDO::PARAM_INT);
+        $consulta->bindParam(':lim', $lim, PDO::PARAM_INT);
+        $consulta->execute();
+        $datos=$consulta->fetch(PDO::FETCH_ASSOC);
+        $consulta=null;
+        $conexion=null;
+        return $datos;
+    }
+
+    public function validarSincronismo(){
+        $conexion = $this->container->get('bd');
+        $sql= 'select cantFacturas("2021-07-10","2021-07-12")';
+        $consulta= $conexion->prepare($sql);
+        $consulta->execute();
+        
+        $consulta->bind_result($result);
+        $consulta->fetch();
+        $consulta->close();
+        // Returns a message
+        return $result;
+    } 
+
+    public function cantFacturass(){
+        $sql= 'select cantFacturas("2021-07-10","2021-07-12")';
+        $conexion = $this->container->get('bd');
+        $consulta= $conexion->prepare($sql);
+        $consulta->execute();
+        $datos = $consulta->fetchAll();
+        $consulta=null;
+        $conexion=null;
+        return $datos;
+    }
+//*************************************************************** */
+
     public function buscar($codigo){
         $conexion = $this->container->get('bd');
         $sql= "call buscar".$this->tabla."(:codigo);";
@@ -188,6 +229,7 @@ class BaseBD{
         $conexion=null;
         return $datos;
     }
+
     
     public function modificarToken($id, $token= ""){
         $sql= 'select modificarToken(:id, :token)';

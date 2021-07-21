@@ -25,6 +25,7 @@ class Facturacion extends BaseBD{
         return $response->withHeader('Content-Type','application/json')->withStatus($status);
     }
 
+
     
     public function nuevo(Request $request, Response $response, $args) {
         $this->iniciar('Facturacion','idFactura');
