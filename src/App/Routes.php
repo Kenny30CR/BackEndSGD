@@ -62,6 +62,16 @@ $app->group('/choferes',function(RouteCollectorProxy $balances){
     $balances->delete('/{codigo}', 'App\Controllers\Choferes:eliminar');
 });
 
+//*****************************RUTAS DE CLIENTES*******************
+$app->group('/clientes',function(RouteCollectorProxy $balances){
+
+    $balances->get('/{indice}/{limite}', 'App\Controllers\Clientes:consultarTodos');
+    $balances->get('/{codigo}', 'App\Controllers\Clientes:buscarCodigo');
+    $balances->get('/filtrado/{campos}/{valores}', 'App\Controllers\Clientes:filtro');
+    $balances->post('', 'App\Controllers\Clientes:nuevo');
+    $balances->put('/{codigo}', 'App\Controllers\Clientes:modificar');
+    $balances->delete('/{codigo}', 'App\Controllers\Clientes:eliminar');
+});
 //*****************************RUTAS DE DESPACHO*******************
 $app->group('/despacho',function(RouteCollectorProxy $balances){
 

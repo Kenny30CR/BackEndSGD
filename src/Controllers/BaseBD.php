@@ -89,7 +89,6 @@ class BaseBD{
         $sql= "call buscar".$this->tabla."(:codigo);";
         $consulta= $conexion->prepare($sql);
         $consulta->bindParam(':codigo', $codigo, $this->obtConst($codigo));
-      
         $consulta->execute();
         $datos = $consulta->fetchAll();
         $consulta=null;

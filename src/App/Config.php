@@ -2,10 +2,10 @@
 $container->set('Config_bd',function(){
     return(object)[
         "host" => "localhost",
-        "bd" => "SGD",
+        "bd" => "sgd",
         "usr" =>  "root",
-        "pass" => "root", //root
+        "pass" => "", //root
         "charset" => "utf8",
-        'collation' => 'utf8_spanish_ci',
+        'collation' => 'utf8_general_ci',
     ];
 });

@@ -11,6 +11,7 @@ class Seguridad extends BaseBD{
         $this->iniciar('Usuario', 'id');
         $datos= $this->buscar($usuario);
         $resultado= (sizeof($datos) > 0 && (password_verify($passw, $datos[0]->passw))) ? $datos : null;
+        
         return $resultado;
     }
 
@@ -19,7 +20,7 @@ class Seguridad extends BaseBD{
         $payload =[
             'iat' => time(),
             'iss' => $_SERVER['SERVER_NAME'],
-            'exp' => time()+(1000),
+            'exp' => time()+(300),
             'sub' => $id,
             'role'=> $rol
         ];
@@ -48,11 +49,11 @@ class Seguridad extends BaseBD{
             $resultado= $this->generarTokens($body->id, $datos[0]->rol);
         }
 
-        if(isset($resultado)){
-            $status=200;
+        if(isset($resultado)){ 
+            $status=200;//OK
             $response->getBody()->write(json_encode($resultado));
         }else{
-            $status=401;
+            $status=401; //unautorized
         }
         
         return $response

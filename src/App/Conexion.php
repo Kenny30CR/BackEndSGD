@@ -13,7 +13,7 @@ $container->set("bd", function(ContainerInterface $c){
     try{
         $con = new PDO($dsn, $conf->usr, $conf->pass, $opc);
     }catch(PDOException $e){
-        print "ERROR!: ". $e->getMessage() . "<br>";
+        print "ERROR! BD: ". $e->getMessage() . "<br>";
         die();
     }
     
