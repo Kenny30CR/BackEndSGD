@@ -63,6 +63,17 @@ $app->group('/choferes',function(RouteCollectorProxy $balances){
     $balances->delete('/{codigo}', 'App\Controllers\Choferes:eliminar');
 });
 
+//*****************************RUTAS DE CLIENTES*******************
+$app->group('/clientes',function(RouteCollectorProxy $balances){
+
+    $balances->get('/{indice}/{limite}', 'App\Controllers\Clientes:consultarTodos');
+    $balances->get('/{codigo}', 'App\Controllers\Clientes:buscarCodigo');
+    $balances->get('/filtrado/{campos}/{valores}', 'App\Controllers\Clientes:filtro');
+    $balances->post('', 'App\Controllers\Clientes:nuevo');
+    $balances->put('/{codigo}', 'App\Controllers\Clientes:modificar');
+    $balances->delete('/{codigo}', 'App\Controllers\Clientes:eliminar');
+});
+
 //*****************************RUTAS DE DESPACHO*******************
 $app->group('/despacho',function(RouteCollectorProxy $balances){
 
@@ -168,4 +179,16 @@ $app->group('/tenant',function(RouteCollectorProxy $balances){
     $balances->post('', 'App\Controllers\Tenant:nuevo');
     $balances->put('/{codigo}', 'App\Controllers\Tenant:modificar');
     $balances->delete('/{codigo}', 'App\Controllers\Tenant:eliminar');
+});
+
+//*****************************RUTAS DE OrdenesDespXFactura*******************
+$app->group('/ordenesdespxfactura',function(RouteCollectorProxy $balances){
+
+    $balances->get('/{indice}/{limite}', 'App\Controllers\Facturacionxordendesp:consultarTodos');
+    $balances->get('/{codigo}', 'App\Controllers\Facturacionxordendesp:buscarCodigo');
+    $balances->get('id/{codigo}', 'App\Controllers\Facturacionxordendesp:buscaridCodigo');
+    $balances->get('/filtrado/{campos}/{valores}', 'App\Controllers\Facturacionxordendesp:filtro');
+    $balances->post('', 'App\Controllers\Facturacionxordendesp:nuevo');
+    $balances->put('/{codigo}', 'App\Controllers\Facturacionxordendesp:modificar');
+    $balances->delete('/{codigo}', 'App\Controllers\Facturacionxordendesp:eliminar');
 });

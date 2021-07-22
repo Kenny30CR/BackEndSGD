@@ -845,6 +845,78 @@ begin
 end$$
 DELIMITER ;
 
+
+
+-- ordenesDespxfactura------------------------------------------------------------------------------------------------------------------
+
+
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `todosOrdenesDespxFactura`(IN `_pagina` TINYINT, IN `_cantRegs` TINYINT)
+begin
+    select * from facturacionxordendesp order by idFactura limit _pagina, _cantRegs;
+end$$
+DELIMITER ;
+
+
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `buscarOrdenesDespxFactura`(IN `_id` int(11))
+begin
+    select * from facturacionxordendesp where idFactura = _idFactura;
+end$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `buscaridOrdenesDespxFactura`(IN `_id` int(11))
+begin
+    select * from facturacionxordendesp where id = _id;
+end$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` FUNCTION `nuevoOrdenesDespxFactura`(`_id` int(11),`_idTenant` int(11),  `_idFactura` int(11), `_ordenDesp` int(11)) RETURNS int(1)
+begin
+    declare _cant int;
+    select count(id) into _cant from facturacionxordendesp where id = _id;
+    if _cant < 1 then
+        insert into facturacionxordendesp
+        (id,idTenant1,idFactura,ordenDesp) 
+			values (_id,_idTenant,_idFactura,_ordenDesp);
+    end if;
+    return _cant;
+end$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` FUNCTION `editarOrdenesDespxFactura`(`_id` int(11),  `_ordenDesp` int(11)) RETURNS int(1)
+begin
+    declare _cant int;
+    select count(id) into _cant from tenant where id = _id;
+    if _cant = 1 then
+		
+        update facturacionxordendesp set   
+                ordenDesp=_ordenDesp
+        where id = _id;
+        set _cant=1;
+        else 
+        set _cant=2;
+ 
+    end if;
+    return _cant;
+end$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` FUNCTION `eliminarOrdenesDespxFactura`(`_id` int(11)) RETURNS int(1)
+begin
+    declare _cant int;
+    select count(id) into _cant from tenant where id = _id;
+    if _cant > 0 then
+        delete from facturacionxordendesp where id = _id;
+    end if;
+    return _cant;
+end$$
+DELIMITER ;
+
 -- ********------------------------------------------------------------------------------------------------------------------
 DELIMITER $$
 CREATE DEFINER=`root`@`localhost` FUNCTION `siguienteCodigo`(`tabla` VARCHAR(255) CHARSET utf8) RETURNS int(1)

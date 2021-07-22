@@ -137,6 +137,23 @@ class BaseBD{
         $conexion=null;
         return $datos;
     }
+
+
+
+    public function buscarid($codigo){
+        $conexion = $this->container->get('bd');
+        $sql= "call buscarid".$this->tabla."(:codigo);";
+        $consulta= $conexion->prepare($sql);
+        $consulta->bindParam(':codigo', $codigo, $this->obtConst($codigo));
+      
+        $consulta->execute();
+        $datos = $consulta->fetchAll();
+        $consulta=null;
+        $conexion=null;
+        return $datos;
+    }
+
+
     public function filtrar($pag,$lim, $datos=false){
         $pag =($pag-1) * $lim;
         $sql = "select * from ". $this->tabla;
