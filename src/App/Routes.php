@@ -9,7 +9,8 @@ $app->get('/', function (Request $request, Response $response, $args) {
     return $response;
 });
 //*********************RUTAS DE FILTROS*****************
-$app->get('/codigo/{tabla}',  'App\Controllers\codigo:siguienteCodigo');
+$app->get('/codigo/{tabla}',  'App\Controllers\Codigo:siguienteCodigo');
+
 $app->group('/filtrar/{tabla}',function(RouteCollectorProxy $filtro){
     $filtro->get('/numregs','App\Controllers\Filtro:cantRegs');
     $filtro->get('/{pag}/{lim}','App\Controllers\Filtro:ejecutar');
@@ -72,6 +73,7 @@ $app->group('/clientes',function(RouteCollectorProxy $balances){
     $balances->put('/{codigo}', 'App\Controllers\Clientes:modificar');
     $balances->delete('/{codigo}', 'App\Controllers\Clientes:eliminar');
 });
+
 //*****************************RUTAS DE DESPACHO*******************
 $app->group('/despacho',function(RouteCollectorProxy $balances){
 
@@ -127,12 +129,31 @@ $app->group('/facturacion',function(RouteCollectorProxy $balances){
     $balances->delete('/{codigo}', 'App\Controllers\Facturacion:eliminar');
 });
 
+//$app->group('/facturas',function(RouteCollectorProxy $balances){
+    
+    //$balances->get('', 'App\Controllers\Facturas:cantFacturas');
+    //$balances->get('/{indice}/{limite}', 'App\Controllers\facturas:consultarTodos');
+    
+//});
+
+$app->get('/facturas', function (Request $request, Response $response, $args) {
+    $myObj->name = "John";
+    $myObj->age = 30;
+    $myObj->city = "New York";
+    $response->getBody()->write(json_encode($myObj));
+    return $response;
+});
+
+
+
+
+
 //*****************************RUTAS DE FACTURACIONDIESEL*******************
 $app->group('/facturaciondiesel',function(RouteCollectorProxy $balances){
 
     $balances->get('/{indice}/{limite}', 'App\Controllers\FacturacionDiesel:consultarTodos');
     $balances->get('/{codigo}', 'App\Controllers\FacturacionDiesel:buscarCodigo');
-    $balances->get('/filtrado/{campos}/{valores}', 'App\Controllers\FacturacionDiesel:filtro');
+    $balances->get('/filtrado/{campos}/{valores}', 'App\Controllers\FacturacionDiesel:filtro'); 
     $balances->post('', 'App\Controllers\FacturacionDiesel:nuevo');
     $balances->put('/{codigo}', 'App\Controllers\FacturacionDiesel:modificar');
     $balances->delete('/{codigo}', 'App\Controllers\FacturacionDiesel:eliminar');
@@ -158,4 +179,16 @@ $app->group('/tenant',function(RouteCollectorProxy $balances){
     $balances->post('', 'App\Controllers\Tenant:nuevo');
     $balances->put('/{codigo}', 'App\Controllers\Tenant:modificar');
     $balances->delete('/{codigo}', 'App\Controllers\Tenant:eliminar');
+});
+
+//*****************************RUTAS DE OrdenesDespXFactura*******************
+$app->group('/ordenesdespxfactura',function(RouteCollectorProxy $balances){
+
+    $balances->get('/{indice}/{limite}', 'App\Controllers\Facturacionxordendesp:consultarTodos');
+    $balances->get('/{codigo}', 'App\Controllers\Facturacionxordendesp:buscarCodigo');
+    $balances->get('id/{codigo}', 'App\Controllers\Facturacionxordendesp:buscaridCodigo');
+    $balances->get('/filtrado/{campos}/{valores}', 'App\Controllers\Facturacionxordendesp:filtro');
+    $balances->post('', 'App\Controllers\Facturacionxordendesp:nuevo');
+    $balances->put('/{codigo}', 'App\Controllers\Facturacionxordendesp:modificar');
+    $balances->delete('/{codigo}', 'App\Controllers\Facturacionxordendesp:eliminar');
 });

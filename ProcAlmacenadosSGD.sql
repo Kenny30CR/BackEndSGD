@@ -530,13 +530,13 @@ DELIMITER ;
 
 -- Facturacion------------------------------------------------------------------------------------------------------------------
 DELIMITER $$
-CREATE DEFINER=`root`@`localhost` FUNCTION `nuevoFacturacion`(`_idFactura` int(11), `_ordenDesp` int(11), `_subcontratados` VARCHAR(255), `_fechaFactura` VARCHAR(255), `_facturaPagada` int(11), `_descripcion` VARCHAR(255), `_subTotal` int(11), `_montoTotal` int(11), `_indicacionExtra` VARCHAR(255), `_montoExtra` int(11)) RETURNS int(1)
+CREATE DEFINER=`root`@`localhost` FUNCTION `nuevoFacturacion`(`_idtenant` int(11),`_idFactura` int(11), `_subcontratados` VARCHAR(255), `_fechaFactura` VARCHAR(255), `_facturaPagada` int(11), `_descripcion` VARCHAR(255), `_subTotal` int(11), `_montoTotal` int(11), `_indicacionExtra` VARCHAR(255), `_montoExtra` int(11)) RETURNS int(1)
 begin
     declare _cant int;
     select count(idFactura) into _cant from facturacion where idFactura = _idFactura;
     if _cant < 1 then
-        insert into facturacion(idFactura,
-        ordenDesp,
+        insert into facturacion(
+        idTenant,
         subcontratados,
         fechaFactura,
         facturaPagada,
@@ -545,8 +545,8 @@ begin
         montoTotal,
         indicaciónExtra,
         montoExtra) 
-			values (_idFactura,
-        _ordenDesp,
+			values (_idtenant,
+        _idFactura,
         _subcontratados,
         _fechaFactura,
         _facturaPagada,
@@ -578,14 +578,14 @@ DELIMITER ;
 
 
 DELIMITER $$
-CREATE DEFINER=`root`@`localhost` FUNCTION `editarFacturacion`(`_idFactura` int(11), `_ordenDesp` int(11), `_subcontratados` VARCHAR(255), `_fechaFactura` VARCHAR(255), `_facturaPagada` int(11), `_descripcion` VARCHAR(255), `_subTotal` int(11), `_montoTotal` int(11), `_indicacionExtra` VARCHAR(255), `_montoExtra` int(11)) RETURNS int(1)
+CREATE DEFINER=`root`@`localhost` FUNCTION `editarFacturacion`(`_idtenant` int(11),`_idFactura` int(11), `_subcontratados` VARCHAR(255), `_fechaFactura` VARCHAR(255), `_facturaPagada` int(11), `_descripcion` VARCHAR(255), `_subTotal` int(11), `_montoTotal` int(11), `_indicacionExtra` VARCHAR(255), `_montoExtra` int(11)) RETURNS int(1)
 begin
     declare _cant int;
     select count(idFactura) into _cant from facturacion where idFactura = _idFactura;
     if _cant = 1 then
 		
         update facturacion set  
-            ordenDesp= _ordenDesp,
+            idTenant= _idtenant,
             subcontratados=_subcontratados,
             fechaFactura=_fechaFactura,
             facturaPagada=_facturaPagada,
@@ -613,6 +613,13 @@ begin
         delete from facturacion where idFactura = _idFactura;
     end if;
     return _cant;
+end$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `todosFacturacion`(IN `_pagina` TINYINT, IN `_cantRegs` TINYINT)
+begin
+    select * from facturacion order by fechaFactura limit _pagina, _cantRegs;
 end$$
 DELIMITER ;
 
@@ -658,7 +665,7 @@ begin
 			      idTenant1 = _idtenant,
                 fecha=_fecha,
                 pagada=_pagada,
-                beneficio=_benef
+                beneficio=_beneficio
         where idFactura = _idFactura;
         set _cant=1;
         else 
@@ -838,6 +845,78 @@ begin
 end$$
 DELIMITER ;
 
+
+
+-- ordenesDespxfactura------------------------------------------------------------------------------------------------------------------
+
+
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `todosOrdenesDespxFactura`(IN `_pagina` TINYINT, IN `_cantRegs` TINYINT)
+begin
+    select * from facturacionxordendesp order by idFactura limit _pagina, _cantRegs;
+end$$
+DELIMITER ;
+
+
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `buscarOrdenesDespxFactura`(IN `_id` int(11))
+begin
+    select * from facturacionxordendesp where idFactura = _idFactura;
+end$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `buscaridOrdenesDespxFactura`(IN `_id` int(11))
+begin
+    select * from facturacionxordendesp where id = _id;
+end$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` FUNCTION `nuevoOrdenesDespxFactura`(`_id` int(11),`_idTenant` int(11),  `_idFactura` int(11), `_ordenDesp` int(11)) RETURNS int(1)
+begin
+    declare _cant int;
+    select count(id) into _cant from facturacionxordendesp where id = _id;
+    if _cant < 1 then
+        insert into facturacionxordendesp
+        (id,idTenant1,idFactura,ordenDesp) 
+			values (_id,_idTenant,_idFactura,_ordenDesp);
+    end if;
+    return _cant;
+end$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` FUNCTION `editarOrdenesDespxFactura`(`_id` int(11),  `_ordenDesp` int(11)) RETURNS int(1)
+begin
+    declare _cant int;
+    select count(id) into _cant from tenant where id = _id;
+    if _cant = 1 then
+		
+        update facturacionxordendesp set   
+                ordenDesp=_ordenDesp
+        where id = _id;
+        set _cant=1;
+        else 
+        set _cant=2;
+ 
+    end if;
+    return _cant;
+end$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` FUNCTION `eliminarOrdenesDespxFactura`(`_id` int(11)) RETURNS int(1)
+begin
+    declare _cant int;
+    select count(id) into _cant from tenant where id = _id;
+    if _cant > 0 then
+        delete from facturacionxordendesp where id = _id;
+    end if;
+    return _cant;
+end$$
+DELIMITER ;
+
 -- ********------------------------------------------------------------------------------------------------------------------
 DELIMITER $$
 CREATE DEFINER=`root`@`localhost` FUNCTION `siguienteCodigo`(`tabla` VARCHAR(255) CHARSET utf8) RETURNS int(1)
@@ -849,3 +928,18 @@ begin
 DELIMITER ;
 
 
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` FUNCTION `cantFacturas`(`_fech1` varchar(255), `_fech2` varchar(255)) RETURNS int(1)
+begin
+  declare _cant int;
+  SELECT COUNT(idFactura) into _cant FROM facturacion where fechaFactura BETWEEN _fech1 and _fech2;
+  return _cant;
+  end$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `todosFacturacionxordenDesp`(IN `_pagina` TINYINT, IN `_cantRegs` TINYINT)
+begin
+    select * from tenant order by nombreTenant limit _pagina, _cantRegs;
+end$$
+DELIMITER ;
